@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>WebSocket TurnosSADM</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <p></p>
+        <p></p>
+        <div>
+            <h4>Bienvenido a WebSocket TurnosSADM  </h4>
+            <input type="text" id="messageinput" />
+        </div>
+        <div>
+            <p></p>
+            <p></p>
+            <button type="button" onclick="openSocket();">Open</button>
+            <!--<button type="button" onclick="send();">Send</button>
+            <button type="button" onclick="closeSocket();">Close</button>-->
+        </div>
+        <p></p>
+        <p></p>
+        <div id="messages"></div>
+        <script>
+            var webSocket;
+            var messages = document.getElementById("messages")
+            function openSocket() {
+                if (webSocket !== undefined && webSocket.readyState !== webSocket.CLOSED) {
+                    alert("WebSocket abierto");
+                    return;
+                }
+            }
+
+            webSocket = new WebSocket("ws://172.16.23.128:8080/WSTurnos/endpoint");
+
+            webSocket.onopen = function (event) {
+
+                if (event.data === undefinied) {
+                    return;
+                    alert(event.data);
+                }
+                ;
+
+                webSocket.onmessage = function (event) {
+
+                    writeResponse(event.data);
+                };
+
+                webSocket.onclose = function (event) {
+                    alert("Connection Close")
+                };
+            }
+
+            function send() {
+                var text = document.getElementById("messageinput").value;
+                webSocket.send(text);
+
+            }
+
+            /*function closeSocket() {
+                webSocket.close();
+            }*/
+            function writeResponse(text) {
+                messages.innerHTML += "<br/>"+text;
+            }
+
+
+        </script>
+    </body>
+</html>
